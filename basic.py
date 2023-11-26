@@ -25,16 +25,16 @@ def list_names(folder:str) -> list:
             L.append(extract_names(A[k]))
     return L
 
-def lowercase():
-    #Converts all text files to lowercase
+def lowercase(): #Converts all text files to lowercase
+    #Tries to create directory 'clean'. If it already exists then pass
     try:
         os.mkdir('clean')
     except FileExistsError:
         pass
     A = os.listdir('speeches')
+    #We create a loop to go through each file, then copy its content and paste it in lowercase in a new file
     for i in range(len(A)):
         with open(f'speeches/{A[i]}', 'r+', encoding='utf-8') as file:
             data = file.read()
             new = open(f'clean/{A[i]}', 'w+', encoding='utf-8')
             new.write(data.lower())
-lowercase()
