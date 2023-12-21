@@ -40,14 +40,32 @@ def lowercase(): #Converts all text files to lowercase
             new = open(f'clean/{A[i]}', 'w+', encoding='utf-8')
             new.write(data.lower())
 
+lowercase()
+
 def unimportant(folder:str):
-    tfidfscore = tfidf.matrix(folder)
-    result = []
-    for k in range(len(tfidfscore)):
-        for i in range(len(tfidfscore[k])):
-            if tfidfscore[k][i][1] == 0.0 and len(tfidfscore[k][i][0]) > 0 and tfidfscore[k][i][0] not in result:
-                result.append(tfidfscore[k][i][0])
-    print(f'The least important words are :\n')
-    for j in range(len(result)):
-        print(result[j], end=' | ')
-unimportant('clean')
+    matrice = tfidf.matrix(folder)
+    print('The most unimportant words are')
+    for k in range(len(matrice)):
+        if matrice[k][1] == 0 and matrice[k][2] == 0 and matrice[k][3] == 0 and matrice[k][4] == 0 and matrice[k][5] == 0 and matrice[k][6] == 0 and matrice[k][7] == 0 and matrice[k][8] == 0:
+            print(matrice[k][0])
+
+def important(tfidfscore:float, folder:str):
+    matrice = tfidf.matrix(folder)
+    print('The most important words are')
+    for k in range(len(matrice)):
+        if matrice[k][1] >= tfidfscore and matrice[k][2] >= tfidfscore and matrice[k][3] >= tfidfscore and matrice[k][4] >= tfidfscore and matrice[k][5] >= tfidfscore and matrice[k][6] >= tfidfscore and matrice[k][7] >= tfidfscore and matrice[k][8] >= tfidfscore:
+            print(matrice[k][0])
+
+def most_repeated(n:int, tf_mini:float):
+    print(f'The most repeated words by President {extract_names(f'clean/{os.listdir('clean')[n]}')} are : ')
+    matrice = tfidf.tf(f'clean/{os.listdir('clean')[n]}')
+    for elem in matrice:
+        if matrice[elem] > tf_mini:
+            print(elem)
+
+def most_rare(idf_mini:float):
+    print('The most rare words in the corpus are :')
+    idfscore = tfidf.idf('clean')
+    for k in idfscore:
+        if idfscore[k]*100 > idf_mini:
+            print(k)
