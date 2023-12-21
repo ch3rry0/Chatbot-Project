@@ -16,7 +16,7 @@ def tf(filename:str) -> dict: #Takes a file and returns the TF score for each wo
             tfscore[elem] = 1
     return tfscore
 
-def idf(folder:str): #Takes a folder and returns the IDF score for each word
+def idf(folder:str) -> dict: #Takes a folder and returns the IDF score for each word
     dirlist = os.listdir(folder)
     tempdict = {}
     tempdict2 = {}
@@ -33,9 +33,16 @@ def idf(folder:str): #Takes a folder and returns the IDF score for each word
         idfscore[item] = log10(len(dirlist)/tempdict2[item])
     return idfscore
 
-a = True
-while a:
-    print(idf('clean'))
-    b = input('Press any key to kill the program ...')
-    if b:
-        a = False
+def matrix(folder:str) -> list:
+    M = []
+    idfscore = idf(folder)
+    dirlist = os.listdir(folder)
+    for i in range((len(dirlist))):
+        tfscore = tf(f'{folder}/{dirlist[i]}')
+        temp = []
+        for elem in tfscore:
+            temp.append((elem, idfscore[elem] * tfscore[elem]))
+        M.append(temp)
+    return M
+for k in range(len(os.listdir('clean'))):
+    print(matrix('clean/')[k], '\n')
