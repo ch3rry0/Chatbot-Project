@@ -6,7 +6,7 @@ def tf(filename:str) -> dict: #Takes a file and returns the TF score for each wo
     Lwords = []
     with open(filename, 'r+', encoding='utf-8') as f:
         for line in f:
-            for word in re.split('[-.,\' \n]', line):
+            for word in re.split('[!;:` 0 1 2 3 4 5 6 7 8 9 -.,\' \n]', line):
                 Lwords.append(word)
     tfscore = {}
     for elem in Lwords:
@@ -37,12 +37,19 @@ def matrix(folder:str) -> list:
     M = []
     idfscore = idf(folder)
     dirlist = os.listdir(folder)
-    for i in range((len(dirlist))):
-        tfscore = tf(f'{folder}/{dirlist[i]}')
-        temp = []
+    for k in range(len(dirlist)):
+        tfscore = tf(f'{folder}/{dirlist[k]}')
         for elem in tfscore:
-            temp.append((elem, idfscore[elem] * tfscore[elem]))
-        M.append(temp)
+            temp = []
+            temp.append(elem)
+            for _ in range(len(dirlist)):
+                temp.append(idfscore[elem] * tfscore[elem])
+            if temp in M:
+                M.remove(temp)
+            M.append(temp)
     return M
-for k in range(len(os.listdir('clean'))):
-    print(matrix('clean/')[k], '\n')
+"""
+Mat = matrix('clean')
+for k in range(len(Mat)):
+    print(f'{Mat[k][0]} : {Mat[k][1]}, {Mat[k][2]}, {Mat[k][3]}, {Mat[k][4]}, {Mat[k][5]}, {Mat[k][6]}, {Mat[k][7]}, {Mat[k][8]}')
+"""
