@@ -1,4 +1,5 @@
 import os
+import tfidf
 
 def extract_names(filename:str) -> str:
     #This function extracts the names of the Presidents from the files
@@ -38,3 +39,15 @@ def lowercase(): #Converts all text files to lowercase
             data = file.read()
             new = open(f'clean/{A[i]}', 'w+', encoding='utf-8')
             new.write(data.lower())
+
+def unimportant(folder:str):
+    tfidfscore = tfidf.matrix(folder)
+    result = []
+    for k in range(len(tfidfscore)):
+        for i in range(len(tfidfscore[k])):
+            if tfidfscore[k][i][1] == 0.0 and len(tfidfscore[k][i][0]) > 0 and tfidfscore[k][i][0] not in result:
+                result.append(tfidfscore[k][i][0])
+    print(f'The least important words are :\n')
+    for j in range(len(result)):
+        print(result[j], end=' | ')
+unimportant('clean')
